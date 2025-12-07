@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { motion } from '@/components/ui/motion';
-import { ArrowRight, Check, Leaf, ShoppingCart, Sparkles, Star, Truck } from 'lucide-react';
+import { ArrowRight, Check, Leaf, ShoppingCart, Star, Truck } from 'lucide-react';
 
 const features = [
     '100% Naturel & Bio',

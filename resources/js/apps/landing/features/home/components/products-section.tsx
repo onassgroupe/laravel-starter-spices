@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Reveal, motion } from '@/components/ui/motion';
-import { ArrowRight, Flame, Heart, ShoppingBag, Star, Sparkles } from 'lucide-react';
+import { ArrowRight, Flame, Heart, ShoppingBag, Star, Package } from 'lucide-react';
 
 const products = [
     {
@@ -10,7 +11,7 @@ const products = [
         origin: 'Madagascar',
         price: 2500,
         oldPrice: 3000,
-        unit: '100g',
+        weight: '100g',
         image: 'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=400&q=80',
         rating: 4.9,
         reviews: 124,
@@ -22,7 +23,7 @@ const products = [
         name: 'Safran Premium',
         origin: 'Maroc',
         price: 15000,
-        unit: '1g',
+        weight: '1g',
         image: 'https://images.unsplash.com/photo-1599909533169-74a3f76ef2a4?w=400&q=80',
         rating: 5.0,
         reviews: 89,
@@ -33,7 +34,7 @@ const products = [
         name: 'Piment Rouge',
         origin: 'Burkina Faso',
         price: 1800,
-        unit: '50g',
+        weight: '50g',
         image: 'https://images.unsplash.com/photo-1583119022894-919a68a3d0e3?w=400&q=80',
         rating: 4.8,
         reviews: 156,
@@ -44,7 +45,7 @@ const products = [
         name: 'Cannelle Ceylan',
         origin: 'Sri Lanka',
         price: 3500,
-        unit: '100g',
+        weight: '100g',
         image: 'https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=400&q=80',
         rating: 4.9,
         reviews: 98,
@@ -54,7 +55,7 @@ const products = [
         name: 'Poivre Noir',
         origin: 'Cambodge',
         price: 4500,
-        unit: '100g',
+        weight: '100g',
         image: 'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=400&q=80',
         rating: 5.0,
         reviews: 201,
@@ -65,7 +66,7 @@ const products = [
         name: 'Gingembre Frais',
         origin: 'Nigeria',
         price: 2000,
-        unit: '250g',
+        weight: '250g',
         image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&q=80',
         rating: 4.7,
         reviews: 145,
@@ -102,23 +103,21 @@ export function ProductsSection() {
                                 Nos epices <span className="text-spice-700">vedettes</span>
                             </h2>
                             <p className="text-muted-foreground text-lg max-w-xl">
-                                Une selection de nos meilleures epices, choisies pour leur qualite exceptionnelle
+                                Une selection de nos meilleures epices en bocaux, choisies pour leur qualite exceptionnelle
                             </p>
                         </div>
-                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                            <Button
-                                variant="outline"
-                                className="border-2 border-spice-200 dark:border-spice-800 text-spice-700 dark:text-spice-400 hover:bg-spice-50 dark:hover:bg-spice-900/20 rounded-full group px-6"
-                            >
-                                Voir tout le catalogue
-                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                            </Button>
-                        </motion.div>
+                        <Link
+                            href="#products"
+                            className="inline-flex items-center text-spice-700 dark:text-spice-400 font-medium hover:text-spice-800 dark:hover:text-spice-300 transition-colors group"
+                        >
+                            Voir tout le catalogue
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Link>
                     </div>
                 </Reveal>
 
-                {/* Products Grid - Masonry style */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Products Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {products.map((product, index) => (
                         <motion.div
                             key={product.id}
@@ -128,23 +127,45 @@ export function ProductsSection() {
                             viewport={{ once: true }}
                             onMouseEnter={() => setHoveredId(product.id)}
                             onMouseLeave={() => setHoveredId(null)}
-                            className={`group ${index === 0 ? 'sm:col-span-2 lg:col-span-1 lg:row-span-2' : ''}`}
+                            className="group"
                         >
                             <div className={`relative bg-white dark:bg-slate-800 rounded-3xl overflow-hidden transition-all duration-500 border border-spice-100 dark:border-spice-900/30 ${
                                 hoveredId === product.id ? 'shadow-2xl shadow-spice-500/10 -translate-y-2' : 'shadow-lg'
                             }`}>
-                                {/* Image container */}
-                                <div className={`relative overflow-hidden ${index === 0 ? 'h-[280px] lg:h-[320px]' : 'h-[220px]'}`}>
-                                    <motion.img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-full object-cover"
+                                {/* Product Image - Bottle/Jar style presentation */}
+                                <div className="relative h-[260px] bg-gradient-to-b from-spice-50 to-white dark:from-slate-700 dark:to-slate-800 flex items-center justify-center p-6">
+                                    {/* Decorative shelf line */}
+                                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-spice-200/50 dark:bg-spice-800/30" />
+
+                                    {/* Product jar/bottle visualization */}
+                                    <motion.div
                                         animate={{
-                                            scale: hoveredId === product.id ? 1.1 : 1
+                                            y: hoveredId === product.id ? -8 : 0
                                         }}
-                                        transition={{ duration: 0.6 }}
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                                        transition={{ duration: 0.3 }}
+                                        className="relative"
+                                    >
+                                        {/* Jar container */}
+                                        <div className="relative w-32 h-44 bg-gradient-to-b from-amber-50/80 to-amber-100/60 dark:from-amber-900/30 dark:to-amber-800/20 rounded-t-lg rounded-b-2xl border border-amber-200/50 dark:border-amber-700/30 shadow-lg overflow-hidden">
+                                            {/* Jar lid */}
+                                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-spice-700 rounded-t-lg shadow-md" />
+
+                                            {/* Spice content image */}
+                                            <div className="absolute inset-2 top-4 rounded-lg overflow-hidden">
+                                                <img
+                                                    src={product.image}
+                                                    alt={product.name}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+
+                                            {/* Label */}
+                                            <div className="absolute bottom-2 left-2 right-2 bg-white/90 dark:bg-slate-900/90 rounded-lg p-2 text-center">
+                                                <p className="text-xs font-bold text-spice-700 truncate">{product.name}</p>
+                                                <p className="text-[10px] text-muted-foreground">{product.weight}</p>
+                                            </div>
+                                        </div>
+                                    </motion.div>
 
                                     {/* Badges */}
                                     <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -169,31 +190,16 @@ export function ProductsSection() {
                                         className={`absolute top-4 right-4 h-10 w-10 rounded-full flex items-center justify-center transition-colors ${
                                             favorites.includes(product.id)
                                                 ? 'bg-red-500 text-white'
-                                                : 'bg-white/90 text-slate-600 hover:bg-white'
+                                                : 'bg-white/90 text-slate-600 hover:bg-white shadow-md'
                                         }`}
                                     >
                                         <Heart className={`h-5 w-5 ${favorites.includes(product.id) ? 'fill-current' : ''}`} />
                                     </motion.button>
-
-                                    {/* Quick add button - shows on hover */}
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{
-                                            opacity: hoveredId === product.id ? 1 : 0,
-                                            y: hoveredId === product.id ? 0 : 20
-                                        }}
-                                        className="absolute bottom-4 left-4 right-4"
-                                    >
-                                        <Button className="w-full h-11 bg-spice-700 hover:bg-spice-800 text-white rounded-xl font-semibold">
-                                            <ShoppingBag className="h-4 w-4 mr-2" />
-                                            Ajouter au panier
-                                        </Button>
-                                    </motion.div>
                                 </div>
 
                                 {/* Content */}
                                 <div className="p-5">
-                                    <div className="flex items-center gap-2 mb-2">
+                                    <div className="flex items-center gap-2 mb-3">
                                         <div className="flex items-center gap-1">
                                             <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
                                             <span className="text-sm font-bold text-foreground">{product.rating}</span>
@@ -203,13 +209,14 @@ export function ProductsSection() {
                                         <span className="text-xs text-spice-600 font-medium">{product.origin}</span>
                                     </div>
 
-                                    <h3 className={`font-bold text-foreground mb-2 ${index === 0 ? 'text-xl' : 'text-lg'}`}>
+                                    <h3 className="text-lg font-bold text-foreground mb-1">
                                         {product.name}
                                     </h3>
+                                    <p className="text-sm text-muted-foreground mb-4">Bocal de {product.weight}</p>
 
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-baseline gap-2">
-                                            <span className={`font-bold text-spice-700 ${index === 0 ? 'text-2xl' : 'text-xl'}`}>
+                                            <span className="text-xl font-bold text-spice-700">
                                                 {formatPrice(product.price)}
                                             </span>
                                             {product.oldPrice && (
@@ -218,9 +225,12 @@ export function ProductsSection() {
                                                 </span>
                                             )}
                                         </div>
-                                        <span className="text-xs text-muted-foreground bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-full">
-                                            / {product.unit}
-                                        </span>
+                                        <Button
+                                            size="sm"
+                                            className="bg-spice-700 hover:bg-spice-800 text-white rounded-xl"
+                                        >
+                                            <ShoppingBag className="h-4 w-4" />
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
@@ -237,32 +247,26 @@ export function ProductsSection() {
 
                         <div className="relative p-8 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8">
                             <div className="flex items-center gap-6">
-                                <motion.div
-                                    animate={{ rotate: [0, 10, -10, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity }}
-                                    className="hidden sm:flex h-20 w-20 bg-white/10 rounded-2xl items-center justify-center"
-                                >
-                                    <Sparkles className="h-10 w-10 text-white" />
-                                </motion.div>
+                                <div className="hidden sm:flex h-20 w-20 bg-white/10 rounded-2xl items-center justify-center">
+                                    <Package className="h-10 w-10 text-white" />
+                                </div>
                                 <div className="text-center lg:text-left">
                                     <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">
                                         Plus de 50 varietes disponibles
                                     </h3>
                                     <p className="text-spice-200 text-lg">
-                                        Explorez notre catalogue complet d'epices du monde
+                                        Explorez notre catalogue complet d'epices en bocaux
                                     </p>
                                 </div>
                             </div>
-                            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                                <Button
-                                    size="lg"
-                                    className="h-14 px-8 bg-white hover:bg-spice-50 text-spice-700 font-bold rounded-2xl group"
-                                >
-                                    <ShoppingBag className="mr-2 h-5 w-5" />
-                                    Explorer la boutique
-                                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                                </Button>
-                            </motion.div>
+                            <Link
+                                href="#products"
+                                className="inline-flex items-center gap-2 h-14 px-8 bg-white hover:bg-spice-50 text-spice-700 font-bold rounded-2xl transition-colors group"
+                            >
+                                <ShoppingBag className="h-5 w-5" />
+                                Explorer la boutique
+                                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                            </Link>
                         </div>
                     </div>
                 </Reveal>
