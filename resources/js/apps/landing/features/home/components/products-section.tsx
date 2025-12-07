@@ -1,232 +1,280 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Reveal, motion } from '@/components/ui/motion';
-import { ArrowRight, Flame, Heart, ShoppingBag, Star } from 'lucide-react';
+import { Reveal } from '@/components/ui/motion';
+import { ArrowRight, ChevronLeft, ChevronRight, Heart, ShoppingCart, Star } from 'lucide-react';
+import { cn } from '@/lib/core';
 
 const products = [
     {
         id: 1,
-        name: 'Curcuma Bio',
+        name: 'Curcuma Bio Moulu',
         origin: 'Madagascar',
-        price: 2500,
-        oldPrice: 3000,
+        price: '2 500',
+        oldPrice: '3 000',
         weight: '100g',
         image: 'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=400&q=80',
         rating: 4.9,
         reviews: 124,
-        hot: true,
-        badge: 'Populaire',
+        badge: '-17%',
+        category: 'Racines',
     },
     {
         id: 2,
         name: 'Safran Premium',
         origin: 'Maroc',
-        price: 15000,
+        price: '15 000',
         weight: '1g',
         image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&q=80',
         rating: 5.0,
         reviews: 89,
         badge: 'Premium',
+        category: 'Pistils',
     },
     {
         id: 3,
-        name: 'Piment Rouge',
+        name: 'Piment Rouge Poudre',
         origin: 'Burkina Faso',
-        price: 1800,
+        price: '1 800',
         weight: '50g',
         image: 'https://images.unsplash.com/photo-1583119022894-919a68a3d0e3?w=400&q=80',
         rating: 4.8,
         reviews: 156,
-        hot: true,
+        badge: 'Populaire',
+        category: 'Piments',
     },
     {
         id: 4,
-        name: 'Cannelle Ceylan',
+        name: 'Cannelle de Ceylan',
         origin: 'Sri Lanka',
-        price: 3500,
+        price: '3 500',
         weight: '100g',
         image: 'https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=400&q=80',
         rating: 4.9,
         reviews: 98,
+        badge: 'Bio',
+        category: 'Ecorces',
     },
     {
         id: 5,
-        name: 'Poivre Noir',
+        name: 'Poivre Noir de Kampot',
         origin: 'Cambodge',
-        price: 4500,
+        price: '4 500',
         weight: '100g',
         image: 'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=400&q=80',
         rating: 5.0,
         reviews: 201,
         badge: 'Best-seller',
+        category: 'Grains',
     },
     {
         id: 6,
         name: 'Gingembre Moulu',
         origin: 'Nigeria',
-        price: 2000,
+        price: '2 000',
         weight: '250g',
         image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&q=80',
         rating: 4.7,
         reviews: 145,
+        badge: 'Nouveau',
+        category: 'Racines',
+    },
+    {
+        id: 7,
+        name: 'Cardamome Verte',
+        origin: 'Guatemala',
+        price: '6 500',
+        weight: '50g',
+        image: 'https://images.unsplash.com/photo-1596547609652-9cf5d8c10616?w=400&q=80',
+        rating: 4.8,
+        reviews: 67,
+        badge: 'Premium',
+        category: 'Graines',
+    },
+    {
+        id: 8,
+        name: 'Paprika Fume',
+        origin: 'Espagne',
+        price: '2 800',
+        weight: '75g',
+        image: 'https://images.unsplash.com/photo-1599909631715-1ac36e658dc2?w=400&q=80',
+        rating: 4.6,
+        reviews: 112,
+        category: 'Piments',
     },
 ];
 
-const formatPrice = (price: number) => new Intl.NumberFormat('fr-FR').format(price) + ' F';
-
 export function ProductsSection() {
-    const [hoveredId, setHoveredId] = useState<number | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [favorites, setFavorites] = useState<number[]>([]);
 
-    const toggleFavorite = (id: number) => {
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = 320;
+            scrollContainerRef.current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth',
+            });
+        }
+    };
+
+    const toggleFavorite = (e: React.MouseEvent, id: number) => {
+        e.preventDefault();
+        e.stopPropagation();
         setFavorites(prev =>
             prev.includes(id) ? prev.filter(fid => fid !== id) : [...prev, id]
         );
     };
 
     return (
-        <section id="products" className="py-24 bg-white dark:bg-slate-900 relative overflow-hidden">
-            <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section id="products" className="bg-gradient-to-b from-spice-50/50 to-white dark:from-slate-900 dark:to-slate-950 py-16 lg:py-24">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
                 <Reveal variant="fadeUp">
-                    <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
+                    <div className="flex items-center justify-between mb-10">
                         <div>
-                            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+                            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
                                 Nos epices <span className="text-spice-700">vedettes</span>
                             </h2>
-                            <p className="text-muted-foreground text-lg max-w-xl">
+                            <p className="text-muted-foreground mt-2">
                                 Une selection de nos meilleures epices, disponibles en differents formats
                             </p>
                         </div>
                         <Link
                             href="#products"
-                            className="inline-flex items-center text-spice-700 dark:text-spice-400 font-medium hover:text-spice-800 dark:hover:text-spice-300 transition-colors group"
+                            className="hidden sm:flex items-center gap-2 text-sm font-medium text-spice-700 hover:text-spice-800 dark:text-spice-400 dark:hover:text-spice-300"
                         >
                             Voir tout le catalogue
-                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            <ArrowRight className="h-4 w-4" />
                         </Link>
                     </div>
                 </Reveal>
 
-                {/* Products Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {products.map((product, index) => (
-                        <motion.div
-                            key={product.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            viewport={{ once: true }}
-                            onMouseEnter={() => setHoveredId(product.id)}
-                            onMouseLeave={() => setHoveredId(null)}
-                            className="group"
-                        >
-                            <div className={`relative bg-white dark:bg-slate-800 rounded-3xl overflow-hidden transition-all duration-500 border border-spice-100 dark:border-spice-900/30 ${
-                                hoveredId === product.id ? 'shadow-2xl shadow-spice-500/10 -translate-y-2' : 'shadow-lg'
-                            }`}>
-                                {/* Product Image */}
-                                <div className="relative h-[240px] overflow-hidden">
-                                    <motion.img
+                {/* Products carousel */}
+                <Reveal variant="fadeUp" delay={0.1}>
+                    <div
+                        ref={scrollContainerRef}
+                        className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4 -mx-4 px-4"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
+                        {products.map((product) => (
+                            <Link
+                                key={product.id}
+                                href={`/product/${product.id}`}
+                                className="group flex-shrink-0 w-[300px] rounded-2xl bg-white dark:bg-slate-800 overflow-hidden border border-spice-100 dark:border-slate-700 hover:shadow-xl hover:border-spice-200 dark:hover:border-spice-800 transition-all duration-300"
+                            >
+                                {/* Image */}
+                                <div className="relative aspect-square overflow-hidden bg-spice-50 dark:bg-slate-700">
+                                    <img
                                         src={product.image}
                                         alt={product.name}
-                                        className="w-full h-full object-cover"
-                                        animate={{
-                                            scale: hoveredId === product.id ? 1.05 : 1
-                                        }}
-                                        transition={{ duration: 0.4 }}
+                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
-                                    {/* Badges */}
-                                    <div className="absolute top-4 left-4 flex flex-col gap-2">
-                                        {product.badge && (
-                                            <span className="px-3 py-1.5 bg-spice-700 text-white text-xs font-bold rounded-full">
-                                                {product.badge}
-                                            </span>
-                                        )}
-                                        {product.hot && (
-                                            <span className="px-3 py-1.5 bg-orange-500 text-white text-xs font-bold rounded-full flex items-center gap-1">
-                                                <Flame className="h-3 w-3" />
-                                                Hot
-                                            </span>
-                                        )}
+                                    {/* Badge */}
+                                    {product.badge && (
+                                        <div className={cn(
+                                            "absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-bold text-white",
+                                            product.badge.startsWith('-') ? "bg-rose-500" :
+                                            product.badge === 'Nouveau' ? "bg-spice-600" :
+                                            product.badge === 'Best-seller' ? "bg-amber-500" :
+                                            product.badge === 'Populaire' ? "bg-orange-500" :
+                                            product.badge === 'Bio' ? "bg-green-600" :
+                                            "bg-spice-700"
+                                        )}>
+                                            {product.badge}
+                                        </div>
+                                    )}
+
+                                    {/* Weight badge */}
+                                    <div className="absolute bottom-3 left-3 rounded-full px-3 py-1.5 bg-white/95 dark:bg-slate-900/95 text-spice-700 text-sm font-bold shadow-sm">
+                                        {product.weight}
                                     </div>
 
                                     {/* Favorite button */}
-                                    <motion.button
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        onClick={() => toggleFavorite(product.id)}
-                                        className={`absolute top-4 right-4 h-10 w-10 rounded-full flex items-center justify-center transition-colors ${
+                                    <button
+                                        onClick={(e) => toggleFavorite(e, product.id)}
+                                        className={cn(
+                                            "absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full shadow-lg transition-all duration-200",
                                             favorites.includes(product.id)
-                                                ? 'bg-red-500 text-white'
-                                                : 'bg-white/90 text-slate-600 hover:bg-white shadow-md'
-                                        }`}
+                                                ? "bg-rose-500 text-white"
+                                                : "bg-white/95 text-slate-600 hover:bg-rose-50 hover:text-rose-500"
+                                        )}
                                     >
-                                        <Heart className={`h-5 w-5 ${favorites.includes(product.id) ? 'fill-current' : ''}`} />
-                                    </motion.button>
+                                        <Heart className={cn("h-5 w-5", favorites.includes(product.id) && "fill-current")} />
+                                    </button>
 
-                                    {/* Weight badge */}
-                                    <div className="absolute bottom-4 left-4">
-                                        <span className="px-3 py-1.5 bg-white/90 dark:bg-slate-900/90 text-spice-700 text-sm font-bold rounded-full">
-                                            {product.weight}
-                                        </span>
+                                    {/* Add to cart overlay */}
+                                    <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                            className="flex h-10 w-10 items-center justify-center rounded-full bg-spice-700 hover:bg-spice-800 text-white shadow-lg transition-colors"
+                                        >
+                                            <ShoppingCart className="h-5 w-5" />
+                                        </button>
                                     </div>
                                 </div>
 
                                 {/* Content */}
                                 <div className="p-5">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="flex items-center gap-1">
-                                            <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
-                                            <span className="text-sm font-bold text-foreground">{product.rating}</span>
-                                        </div>
-                                        <span className="text-xs text-muted-foreground">({product.reviews} avis)</span>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-xs text-muted-foreground">{product.category}</span>
                                         <span className="text-xs text-muted-foreground">•</span>
                                         <span className="text-xs text-spice-600 font-medium">{product.origin}</span>
                                     </div>
 
-                                    <h3 className="text-lg font-bold text-foreground mb-4">
+                                    <h3 className="font-bold text-foreground mb-3 group-hover:text-spice-700 transition-colors line-clamp-1">
                                         {product.name}
                                     </h3>
 
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-xl font-bold text-spice-700">
-                                                {formatPrice(product.price)}
-                                            </span>
-                                            {product.oldPrice && (
-                                                <span className="text-sm text-muted-foreground line-through">
-                                                    {formatPrice(product.oldPrice)}
-                                                </span>
-                                            )}
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <div className="flex items-center gap-1">
+                                            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                                            <span className="text-sm font-medium text-foreground">{product.rating}</span>
                                         </div>
-                                        <Button
-                                            size="sm"
-                                            className="bg-spice-700 hover:bg-spice-800 text-white rounded-xl"
-                                        >
-                                            <ShoppingBag className="h-4 w-4" />
-                                        </Button>
+                                        <span className="text-sm text-muted-foreground">({product.reviews} avis)</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xl font-bold text-spice-700 dark:text-spice-400">
+                                            {product.price} F
+                                        </span>
+                                        {product.oldPrice && (
+                                            <span className="text-sm text-muted-foreground line-through">
+                                                {product.oldPrice} F
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-
-                {/* Bottom CTA */}
-                <Reveal variant="fadeUp" delay={0.3}>
-                    <div className="mt-16 text-center">
-                        <Link
-                            href="#products"
-                            className="inline-flex items-center gap-2 text-spice-700 dark:text-spice-400 font-medium hover:text-spice-800 dark:hover:text-spice-300 transition-colors group"
-                        >
-                            Decouvrir tous nos produits
-                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
+                            </Link>
+                        ))}
                     </div>
                 </Reveal>
+
+                {/* Navigation arrows */}
+                <div className="mt-8 flex items-center justify-between">
+                    <Link
+                        href="#products"
+                        className="sm:hidden flex items-center gap-2 text-sm font-medium text-spice-700 hover:text-spice-800"
+                    >
+                        Voir tout le catalogue
+                        <ArrowRight className="h-4 w-4" />
+                    </Link>
+
+                    <div className="flex items-center gap-3 ml-auto">
+                        <button
+                            onClick={() => scroll('left')}
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-spice-100 dark:bg-slate-800 hover:bg-spice-200 dark:hover:bg-spice-900/30 transition-colors"
+                        >
+                            <ChevronLeft className="h-5 w-5 text-spice-700 dark:text-spice-400" />
+                        </button>
+                        <button
+                            onClick={() => scroll('right')}
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-spice-700 hover:bg-spice-800 text-white transition-colors"
+                        >
+                            <ChevronRight className="h-5 w-5" />
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
     );

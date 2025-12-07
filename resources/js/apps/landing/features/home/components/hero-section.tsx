@@ -58,7 +58,7 @@ export function HeroSection() {
                 ))}
             </div>
 
-            <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+            <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 lg:pt-32 pb-20">
                 <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-8rem)]">
                     {/* Left Content */}
                     <div className="space-y-8">

@@ -40,7 +40,7 @@ export function LandingFooter() {
     };
 
     return (
-        <footer className="bg-slate-900 text-white relative overflow-hidden">
+        <footer className="bg-slate-900 text-white relative">
             {/* Decorative background */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-spice-700/5 rounded-full blur-3xl" />
@@ -48,17 +48,15 @@ export function LandingFooter() {
             </div>
 
             {/* Back to top button */}
-            <div className="relative">
-                <div className="absolute left-1/2 -translate-x-1/2 -top-6">
-                    <motion.button
-                        onClick={scrollToTop}
-                        whileHover={{ y: -5, scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="h-12 w-12 bg-spice-700 rounded-full flex items-center justify-center shadow-lg shadow-spice-700/30 hover:shadow-xl hover:shadow-spice-700/40 transition-shadow"
-                    >
-                        <ArrowUp className="h-5 w-5 text-white" />
-                    </motion.button>
-                </div>
+            <div className="absolute left-1/2 -translate-x-1/2 -top-7 z-10">
+                <motion.button
+                    onClick={scrollToTop}
+                    whileHover={{ y: -5, scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="h-14 w-14 bg-spice-700 rounded-full flex items-center justify-center shadow-xl shadow-spice-900/40 border-4 border-white dark:border-slate-800 hover:bg-spice-600 transition-colors"
+                >
+                    <ArrowUp className="h-6 w-6 text-white" />
+                </motion.button>
             </div>
 
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
